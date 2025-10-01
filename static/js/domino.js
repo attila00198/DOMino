@@ -21,10 +21,15 @@ function tag(name, ...children) {
         }
     }
 
-    node.attr = function (attributeList) {
+    node.setAttr = function (attributeList) {
         for (const item in attributeList) {
             this.setAttribute(item, attributeList[item])
         }
+        return this
+    }
+
+    node.setCss = function (style) {
+        this.style = style
         return this
     }
 
@@ -39,7 +44,7 @@ function tag(name, ...children) {
     }
 
     node.setId = function (id) {
-        this.attr({ id })
+        this.setAttr({ id })
         return this
     }
 
@@ -47,26 +52,27 @@ function tag(name, ...children) {
         this.className = className
         return this
     }
-    node.setHTML = function (html) {
-        this.innerHTML = html
+
+    node.isDisabled = function () {
+        this.setAttr({ disabled: true })
         return this
     }
 
-    node.clearHTML = function () {
-        this.innerHTML = ""
+    node.toggleClass = function (className) {
+        this.classList.toggle(className)
         return this
     }
 
     return node
 }
 
-function ent(htmlEntity) {
-    let spanEl = tag("span")
-    spanEl.innerHTML = htmlEntity
-    return spanEl
+// ========== Helpers ==========
+
+function clearHTML(element) {
+    element.innerHTML = ""
 }
 
-// ========== Simple Tags ==========
+// ========== Primitives ==========
 
 function hr() {
     return tag("hr")
@@ -78,6 +84,18 @@ function br() {
 
 function div(...children) {
     return tag("div", ...children)
+}
+
+function header(...children) {
+    return tag("header", ...children)
+}
+
+function main(...children) {
+    return tag("main", ...children)
+}
+
+function footer(...children) {
+    return tag("footer", ...children)
 }
 
 function h1(...children) {
@@ -104,8 +122,16 @@ function h6(...children) {
     return tag("h6", ...children)
 }
 
+function em(...children) {
+    return tag("em", ...children)
+}
+
 function mark(...children) {
     return tag("mark", ...children)
+}
+
+function small(...children) {
+    return tag("small", ...children)
 }
 
 function span(...children) {
@@ -117,7 +143,7 @@ function p(...children) {
 }
 
 function a(label, url, target = "") {
-    let node = tag("a").attr({ href: url, target: target })
+    let node = tag("a").setAttr({ href: url, target: target })
     node.innerText = label
     return node
 }
@@ -135,25 +161,39 @@ function nav(...children) {
 }
 
 function img(source) {
-    return tag("img").attr({ src: source })
+    return tag("img").setAttr({ src: source })
 }
 
 function btn(label, type = "button") {
     let node = tag("button")
-    node.attr({ type })
+    node.setAttr({ type })
     node.innerText = label
     return node
+}
+
+// ========== List ============
+
+function ul(...children) {
+    return tag("ul", ...children)
+}
+
+function ol(...children) {
+    return tag("ol", ...children)
+}
+
+function li(...children) {
+    return tag("li", ...children)
 }
 
 // ========== FORM ============
 function form(...children) {
     let node = tag("form", ...children)
 
-    node.setMethod = function (method) { this.attr({ method }); return this }
-    node.setAction = function (action) { this.attr({ action }); return this }
-    node.setAutocomplete = function (value) { this.attr({ autocomplete: value }); return this }
-    node.setEnctype = function (value) { this.attr({ enctype: value }); return this }
-    node.setTarget = function (value) { this.attr({ target: value }); return this }
+    node.setMethod = function (method) { this.setAttr({ method }); return this }
+    node.setAction = function (action) { this.setAttr({ action }); return this }
+    node.setAutocomplete = function (value) { this.setAttr({ autocomplete: value }); return this }
+    node.setEnctype = function (value) { this.setAttr({ enctype: value }); return this }
+    node.setTarget = function (value) { this.setAttr({ target: value }); return this }
     node.onSubmit = function (callback) { this.addEventListener("submit", callback); return this }
 
     return node
@@ -161,19 +201,19 @@ function form(...children) {
 
 function input(type = "text") {
     let node = tag("input")
-        .attr({
+        .setAttr({
             type: type
         })
 
     node.setValue = function (value) { this.value = value; return this }
-    node.setType = function (type) { this.attr({ type }); return this }
-    node.setName = function (name) { this.attr({ name }); return this }
-    node.setPlaceholder = function (placeholder) { this.attr({ placeholder }); return this }
-    node.setPattern = function (pattern) { this.attr({ pattern }); return this }
-    node.setMin = function (min) { this.attr({ min }); return this }
-    node.setMax = function (max) { this.attr({ max }); return this }
+    node.setType = function (type) { this.setAttr({ type }); return this }
+    node.setName = function (name) { this.setAttr({ name }); return this }
+    node.setPlaceholder = function (placeholder) { this.setAttr({ placeholder }); return this }
+    node.setPattern = function (pattern) { this.setAttr({ pattern }); return this }
+    node.setMin = function (min) { this.setAttr({ min }); return this }
+    node.setMax = function (max) { this.setAttr({ max }); return this }
     node.isDisabled = function (disabled = true) { this.disabled = disabled; return this }
-    node.isRequired = function (required = true) { this.attr({ required }); return this }
+    node.isRequired = function (required = true) { this.setAttr({ required }); return this }
     node.onInput = function (callback) { this.addEventListener("input", callback); return this }
     node.onChange = function (callback) { this.addEventListener("change", callback); return this }
 
@@ -206,7 +246,7 @@ function select(...children) {
 
 function option(label, value, isSelected = false) {
     let node = tag("option", label)
-        .attr({ value, isSelected })
+        .setAttr({ value, isSelected })
 
     return node;
 }
@@ -219,7 +259,50 @@ function label(...children) {
     return node;
 }
 
+// ========== Table ============
+
+function table(...children) {
+    return tag("table", ...children)
+}
+
+function thead(...children) {
+    return tag("thead", ...children)
+}
+
+function tbody(...children) {
+    return tag("tbody", ...children)
+}
+
+function caption(...children) {
+    return tag("caption", ...children)
+}
+
+function tr(...children) {
+    return tag("tr", ...children)
+}
+
+function td(...children) {
+    return tag("td", ...children)
+}
+
+function th(...children) {
+    return tag("th", ...children)
+}
+
 // ========== Utilities ============
+
+// Sipler query selectors
+function getById(id) {
+    return document.getElementById(id)
+}
+
+function getByClass(className) {
+    return document.getElementsByClassName(className)
+}
+
+function getByTag(tagName) {
+    return document.getElementsByTagName(tagName)
+}
 
 /**
  * A simple universal router for rendering pages based on URL hash changes.

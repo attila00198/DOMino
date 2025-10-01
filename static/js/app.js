@@ -19,7 +19,7 @@ let images = [
 function menu(items) {
     return nav(
         div(
-            a("MUI.JS", "/").setClass("navbar-brand"),
+            a("Domino.JS", "/").setClass("navbar-brand"),
             btn("Toggle").setClass("navbar-toggler")
                 .attr({
                     "data-bs-toggle": "collapse",
@@ -118,10 +118,21 @@ function handleLogin(e) {
     let uname = formData.get("luname")
     let passwd = formData.get("lpasswd")
 
-    dataToShow = div(
-        p().setHTML(`<b>Felhasználó név:</b>\t${uname}`),
-        p().setHTML(`<b>Jelszó:</b>\t\t\t${passwd}`),
-    ).attr({ style: "white-space: pre;" })
+    dataToShow = table(
+        thead(
+            tr(
+                th("Felhasználó név").attr({ "scope": "col" }),
+                th("Jelszó").attr({ "scope": "col" })
+            )
+        ),
+        tbody(
+
+            tr(
+                td(uname).attr({ "scope": "col" }),
+                td(passwd).attr({ "scope": "col" })
+            ).attr({ "scope": "row" })
+        )
+    ).setClass("table table-dark table-striped")
 
     dataDisplay.appendChild(dataToShow)
     form.reset()
@@ -165,11 +176,23 @@ function handleContact(e) {
     let csubject = formData.get("csubject")
     let cdescription = formData.get("cdescription")
 
-    let dataToShow = div(
-        p().setHTML(`<b>Email:</b>\t${cemail}`),
-        p().setHTML(`<b>Tárgy:</b>\t${selectOptions[csubject]}`),
-        p().setHTML(`<b>Üzenet:</b>\t${cdescription}`)
-    ).attr({ style: "white-space: pre;" })
+    let dataToShow = table(
+        thead(
+            tr(
+                th("Email").attr({ "scope": "col" }),
+                th("Tárgy").attr({ "scope": "col" }),
+                th("Üzenet").attr({ "scope": "col" })
+            )
+        ),
+        tbody(
+
+            tr(
+                td(cemail).attr({ "scope": "col" }),
+                td(selectOptions[csubject]).attr({ "scope": "col" }),
+                td(cdescription).attr({ "scope": "col" })
+            ).attr({ "scope": "row" })
+        )
+    ).setClass("table table-dark table-striped")
     dataDisplay.appendChild(dataToShow)
     form.reset()
 }
@@ -309,8 +332,8 @@ function formContact() {
 
 function home(state) {
     return div(
-        h1("MUI JS Keretrendszer").setClass("mb-4"),
-        p("Ez egy bemutató oldal az MUI javascript keretrendszerhez. Az oldalon található elemek mind ezen eszköz segítségével lettek létrehozva.")
+        h1("Domino.JS Keretrendszer").setClass("mb-4"),
+        p("Ez egy bemutató oldal az Domino javascript keretrendszerhez. Az oldalon található elemek mind ezen eszköz segítségével lettek létrehozva.")
             .setClass("lead"),
         p(`A rendszer a leg alapvetőbb HTML elemekből építkezik.`),
         ul(
@@ -318,7 +341,7 @@ function home(state) {
             li("Bekezdések: p()"),
             li("linkek és gombok: a(), btn()")
         ),
-        p("Ahol szükség van attributumok, id vagy class megadására ott használhatóak a .attr(), .setId és .setClass() láncolható metódusok.\nDe ezeken felül még sok más is rendelkezésre áll, esetenként az elemtől függően."),
+        p("Ahol szükség van attributumok, ", mark("id"), " vagy ", mark("class"), " megadására ott használhatóak a .attr(), .setId és .setClass() láncolható metódusok.\nDe ezeken felül még sok más is rendelkezésre áll, esetenként az elemtől függően."),
         hr(),
         div(
             div(
