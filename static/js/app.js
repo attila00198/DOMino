@@ -21,7 +21,7 @@ function menu(items) {
         div(
             a("Domino.JS", "/").setClass("navbar-brand"),
             btn("Toggle").setClass("navbar-toggler")
-                .attr({
+                .setAttr({
                     "data-bs-toggle": "collapse",
                     "data-bs-target": "#navbarSupportedContent",
                     "aria-controls": "navbarSupportedContent",
@@ -121,16 +121,16 @@ function handleLogin(e) {
     dataToShow = table(
         thead(
             tr(
-                th("Felhasználó név").attr({ "scope": "col" }),
-                th("Jelszó").attr({ "scope": "col" })
+                th("Felhasználó név").setAttr({ "scope": "col" }),
+                th("Jelszó").setAttr({ "scope": "col" })
             )
         ),
         tbody(
 
             tr(
-                td(uname).attr({ "scope": "col" }),
-                td(passwd).attr({ "scope": "col" })
-            ).attr({ "scope": "row" })
+                td(uname).setAttr({ "scope": "col" }),
+                td(passwd).setAttr({ "scope": "col" })
+            ).setAttr({ "scope": "row" })
         )
     ).setClass("table table-dark table-striped")
 
@@ -152,10 +152,10 @@ function handleRegister(e) {
 
     if (passwd === passwd2) {
         dataToShow = div(
-            p().setHTML(`<b>Felhasználó név:</b>\t${uname}`),
-            p().setHTML(`<b>Jelszó:</b>\t\t\t${passwd}`),
-            p().setHTML(`<b>Jelszó ismétlés:</b>\t${passwd2}`)
-        ).attr({ style: "white-space: pre;" })
+            p(`<b>Felhasználó név:</b>\t${uname}`),
+            p(`<b>Jelszó:</b>\t\t\t${passwd}`),
+            p(`<b>Jelszó ismétlés:</b>\t${passwd2}`)
+        ).setAttr({ style: "white-space: pre;" })
     } else {
         dataToShow = "A két jelszó nem egyezik."
     }
@@ -179,18 +179,18 @@ function handleContact(e) {
     let dataToShow = table(
         thead(
             tr(
-                th("Email").attr({ "scope": "col" }),
-                th("Tárgy").attr({ "scope": "col" }),
-                th("Üzenet").attr({ "scope": "col" })
+                th("Email").setAttr({ "scope": "col" }),
+                th("Tárgy").setAttr({ "scope": "col" }),
+                th("Üzenet").setAttr({ "scope": "col" })
             )
         ),
         tbody(
 
             tr(
-                td(cemail).attr({ "scope": "col" }),
-                td(selectOptions[csubject]).attr({ "scope": "col" }),
-                td(cdescription).attr({ "scope": "col" })
-            ).attr({ "scope": "row" })
+                td(cemail).setAttr({ "scope": "col" }),
+                td(selectOptions[csubject]).setAttr({ "scope": "col" }),
+                td(cdescription).setAttr({ "scope": "col" })
+            ).setAttr({ "scope": "row" })
         )
     ).setClass("table table-dark table-striped")
     dataDisplay.appendChild(dataToShow)
@@ -341,7 +341,7 @@ function home(state) {
             li("Bekezdések: p()"),
             li("linkek és gombok: a(), btn()")
         ),
-        p("Ahol szükség van attributumok, ", mark("id"), " vagy ", mark("class"), " megadására ott használhatóak a .attr(), .setId és .setClass() láncolható metódusok.\nDe ezeken felül még sok más is rendelkezésre áll, esetenként az elemtől függően."),
+        p("Ahol szükség van attributumok, ", mark("id"), " vagy ", mark("class"), " megadására ott használhatóak a .setAttr(), .setId és .setClass() láncolható metódusok.\nDe ezeken felül még sok más is rendelkezésre áll, esetenként az elemtől függően."),
         hr(),
         div(
             div(
@@ -396,7 +396,7 @@ function galery() {
                     img(src)
                         .setClass("img-fluid rounded shadow-sm")
                         .setId(`pic${index}`)
-                        .attr({ "data-bs-toggle": "modal", "data-bs-target": "#exampleModal" })
+                        .setAttr({ "data-bs-toggle": "modal", "data-bs-target": "#exampleModal" })
                         .onClick(fullScreenImage)
                 ).setClass("col-md-4 col-sm-6 mb-3")
             )
@@ -442,11 +442,11 @@ function app() {
                 // Content area where router will render pages
                 div().setId("page-content"),
                 // Footer
-                div()
-                    .setHTML("2025 &copy; <b>Kiss Attila</b> <span class='text-muted'>Made with DOMino.js</span>")
+                div("2025 © Kiss Attila Made with DOMino.js")
                     .setClass("container")
             ).setClass("container-fluid")
         )
+        //clearHTML(root)
     }
 
     // Set up the layout first

@@ -28,6 +28,21 @@ function tag(name, ...children) {
         return this
     }
 
+    node.setId = function (id) {
+        this.setAttr({ id })
+        return this
+    }
+
+    node.setClass = function (className) {
+        this.className = className
+        return this
+    }
+
+    node.toggleClass = function (className) {
+        this.classList.toggle(className)
+        return this
+    }
+
     node.setCss = function (style) {
         this.style = style
         return this
@@ -40,16 +55,6 @@ function tag(name, ...children) {
 
     node.onClick = function (callbackFunction) {
         this.on("click", callbackFunction)
-        return this
-    }
-
-    node.setId = function (id) {
-        this.setAttr({ id })
-        return this
-    }
-
-    node.setClass = function (className) {
-        this.className = className
         return this
     }
 
@@ -70,6 +75,11 @@ function tag(name, ...children) {
 
 function clearHTML(element) {
     element.innerHTML = ""
+}
+
+function replaceHTML(element, ...children) {
+    clearHTML(element)
+    element.appendChild(...children)
 }
 
 // ========== Primitives ==========
