@@ -446,7 +446,6 @@ function app() {
                     .setClass("container")
             ).setClass("container-fluid")
         )
-        //clearHTML(root)
     }
 
     // Set up the layout first
