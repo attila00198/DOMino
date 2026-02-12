@@ -296,6 +296,28 @@ function th(...children) {
     return tag("th", ...children)
 }
 
+// ========== Graphics ============
+
+function canvas(width = 300, height = 150) {
+    let node = tag("canvas").setAttr({ width, height })
+
+    node.setWidth = function (w) { this.width = w; return this }
+    node.setHeight = function (h) { this.height = h; return this }
+    node.setSize = function (w, h) { this.width = w; this.height = h; return this }
+
+    node.get2d = function () { return this.getContext('2d') }
+    node.getWebGL = function () { return this.getContext('webgl') }
+
+    // Kényelmes rajzolás callback-kel
+    node.draw = function (callback) {
+        const ctx = this.getContext('2d')
+        callback(ctx, this)
+        return this
+    }
+
+    return node
+}
+
 // ========== Utilities ============
 
 // Export a tidy API object to window for easier consumption
