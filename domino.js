@@ -320,19 +320,7 @@ function canvas(width = 300, height = 150) {
 
 // ========== Utilities ============
 
-// Export a tidy API object to window for easier consumption
-if (typeof window !== 'undefined') {
-    window.domino = {
-        tag, div, span, p, btn, input, textarea, form, select, option,
-        ul, ol, li, img, a, header, main, footer, h1, h2, h3, h4, h5, h6,
-        table, thead, tbody, tr, td, th, caption,
-        clearHTML, replaceHTML, replaceText,
-        getById, getByClass, getByTag,
-        basicRouter
-    }
-}
-
-// Sipler query selectors
+// Simpler query selectors
 function getById(id) {
     return document.getElementById(id)
 }
@@ -345,6 +333,7 @@ function getByTag(tagName) {
     return document.getElementsByTagName(tagName)
 }
 
+// ========== Basic Router ============
 /**
  * A simple universal router for rendering pages based on URL hash changes.
  * 

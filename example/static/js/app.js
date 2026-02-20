@@ -405,6 +405,20 @@ function galery() {
     ).setClass("container mt-4")
 }
 
+function paint() {
+    const width = 16
+    const height = 9
+    const scaler = 60
+    return div(
+        h1("Canvas"),
+        hr(),
+        div(
+            canvas().setId("game").setSize(width * scaler, height * scaler)
+        ).setClass("row"),
+        hr()
+    ).setClass("container mt-4")
+}
+
 // ========== APP ==========
 // Rewritten app function using the new basicRouter
 // Much cleaner - no manual state management for active menu items,
@@ -415,7 +429,8 @@ function app() {
     const routes = {
         home: () => home(state),
         forms: forms,
-        gallery: galery
+        gallery: galery,
+        paint: paint
     }
 
     // Create the persistent layout that stays on all pages
@@ -423,10 +438,11 @@ function app() {
         const menuItems = [
             { label: "Home", route: "home" },
             { label: "Formok", route: "forms" },
-            { label: "Galéria", route: "gallery" }
+            { label: "Galéria", route: "gallery" },
+            { label: "Canvas", route: "paint" }
         ]
 
-        const root = document.getElementById("root")
+        const root = getById("root")
 
         // Create the main layout structure
         root.innerHTML = ""

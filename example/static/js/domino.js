@@ -296,21 +296,31 @@ function th(...children) {
     return tag("th", ...children)
 }
 
-// ========== Utilities ============
+// ========== Graphics ============
 
-// Export a tidy API object to window for easier consumption
-if (typeof window !== 'undefined') {
-    window.domino = {
-        tag, div, span, p, btn, input, textarea, form, select, option,
-        ul, ol, li, img, a, header, main, footer, h1, h2, h3, h4, h5, h6,
-        table, thead, tbody, tr, td, th, caption,
-        clearHTML, replaceHTML, replaceText,
-        getById, getByClass, getByTag,
-        basicRouter
+function canvas(width = 300, height = 150) {
+    let node = tag("canvas").setAttr({ width, height })
+
+    node.setWidth = function (w) { this.width = w; return this }
+    node.setHeight = function (h) { this.height = h; return this }
+    node.setSize = function (w, h) { this.width = w; this.height = h; return this }
+
+    node.get2d = function () { return this.getContext('2d') }
+    node.getWebGL = function () { return this.getContext('webgl') }
+
+    // Kényelmes rajzolás callback-kel
+    node.draw = function (callback) {
+        const ctx = this.getContext('2d')
+        callback(ctx, this)
+        return this
     }
+
+    return node
 }
 
-// Sipler query selectors
+// ========== Utilities ============
+
+// Simpler query selectors
 function getById(id) {
     return document.getElementById(id)
 }
@@ -323,6 +333,7 @@ function getByTag(tagName) {
     return document.getElementsByTagName(tagName)
 }
 
+// ========== Basic Router ============
 /**
  * A simple universal router for rendering pages based on URL hash changes.
  * 
