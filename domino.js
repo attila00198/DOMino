@@ -6,12 +6,12 @@
  * for attributes, styles, events, and form control.
  * 
  * @version 1.0.0
- * @author Your Name
+ * @author Attila Kiss
  * @license MIT
  * 
  * Usage:
  *   const card = div(
- *     h1('Title').setClass('header'),
+ *     h1('Title').addClass('header'),
  *     p('Description'),
  *     btn('Click me').onClick(() => alert('clicked'))
  *   ).setStyle({ padding: '20px', backgroundColor: '#f0f0f0' })
@@ -67,6 +67,11 @@ function tag(name, ...children) {
 
     node.removeClass = function (className) {
         this.classList.remove(className)
+        return this
+    }
+
+    node.setClasses = function (...classNames) {
+        this.className = classNames.join(' ')
         return this
     }
 
@@ -178,7 +183,7 @@ function input(type = "text") {
     node.setMin = function (min) { this.setAttr({ min }); return this }
     node.setMax = function (max) { this.setAttr({ max }); return this }
     node.setDisabled = function (disabled = true) { this.disabled = disabled; return this }
-    node.setRequired = function (required = true) { this.setAttr({ required }); return this }
+    node.setRequired = function (required = true) { this.required = required; return this }
     node.onInput = function (callback) { this.addEventListener("input", callback); return this }
     node.onChange = function (callback) { this.addEventListener("change", callback); return this }
 
@@ -192,7 +197,7 @@ function textarea() {
     node.setValue = function (value) { this.value = value; return this }
     node.setName = function (name) { this.setAttr({ name }); return this }
     node.setDisabled = function (disabled = true) { this.disabled = disabled; return this }
-    node.setRequired = function (required = true) { if (required) this.setAttr({ required: true }); return this }
+    node.setRequired = function (required = true) { this.required = required; return this }
 
     return node
 }
@@ -204,7 +209,7 @@ function select(...children) {
     node.setValue = function (value) { this.value = value; return this; }
     node.onChange = function (callback) { this.addEventListener("change", callback); return this }
     node.setDisabled = function (disabled = true) { this.disabled = disabled; return this }
-    node.setRequired = function (required = true) { if (required) this.setAttr({ required: true }); return this }
+    node.setRequired = function (required = true) { this.required = required; return this }
 
     return node
 }

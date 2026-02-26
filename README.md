@@ -48,7 +48,7 @@ That's it! No build step, no package manager, no complicated setup. Just vanilla
 ### Simple element composition
 ```js
 const card = div(
-  h1('Hello, DOMino').setClass('title'),
+  h1('Hello, DOMino').addClass('title'),
   p('Tiny, composable DOM building.'),
   btn('Learn more').onClick(() => alert('clicked'))
 )

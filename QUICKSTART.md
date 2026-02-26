@@ -41,7 +41,7 @@ document.body.appendChild(greeting);
 ### 2. Add Some Style
 ```js
 const card = div(
-    h1('My Card').setClass('title'),
+    h1('My Card').addClass('title'),
     p('This is a nice card'),
     btn('Click me')
 )
@@ -188,7 +188,7 @@ Every method returns the element, so you can chain:
 btn('Click me')
     .setStyle({ padding: '10px' })
     .onClick(() => alert('Clicked!'))
-    .setClass('primary')
+    .addClass('primary')
     .setId('my-btn');
 ```
 
