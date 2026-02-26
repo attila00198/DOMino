@@ -1,8 +1,32 @@
 /**
+ * DOMino - A tiny, functional-style DOM building library
+ * 
+ * Build composable DOM structures with chainable, zero-dependency helpers.
+ * Features functional element factories (div, span, form, etc.) and fluent API
+ * for attributes, styles, events, and form control.
+ * 
+ * @version 1.0.0
+ * @author Your Name
+ * @license MIT
+ * 
+ * Usage:
+ *   const card = div(
+ *     h1('Title').setClass('header'),
+ *     p('Description'),
+ *     btn('Click me').onClick(() => alert('clicked'))
+ *   ).setStyle({ padding: '20px', backgroundColor: '#f0f0f0' })
+ *   
+ *   document.body.appendChild(card)
+ * 
+ * All functions are automatically available on the global scope.
+ * TreeShakeable: use an ES6-compatible bundler to strip unused helpers.
+ */
+
+/**
  * Creates a DOM element with the specified tag name and appends child nodes or text.
  * Adds chainable helper methods to the element for setting attributes, event listeners, id, class, etc.
  *
- * @function
+ * @function tag
  * @param {string} name - The tag name of the element to create (e.g., 'div', 'span').
  * @param {...(string|Node)} children - Child elements or text to append to the created element.
  * @returns {HTMLElement} The created DOM element with chainable helper methods:
@@ -14,17 +38,15 @@
  *   - toggleClass(className: string): HTMLElement
  *   - setStyle(style: string|Object): HTMLElement
  *   - onClick(callbackFunction: function): HTMLElement
- *   - isDisabled(disabled = true): HTMLElement
+ *   - setDisabled(disabled = true): HTMLElement
  */
 function tag(name, ...children) {
-    let node = document.createElement(name)
-    for (const child of children) {
-        if (typeof child === "string") {
-            node.appendChild(document.createTextNode(child))
-        } else {
-            node.appendChild(child)
-        }
-    }
+    const node = document.createElement(name)
+    children.forEach(child => {
+        node.appendChild(
+            typeof child === "string" ? document.createTextNode(child) : child
+        )
+    })
 
     node.setAttr = function (attributeList) {
         for (const item in attributeList) {
@@ -74,7 +96,7 @@ function tag(name, ...children) {
     }
 
     // setter style for disabled state, accepts boolean (default true)
-    node.isDisabled = function (disabled = true) {
+    node.setDisabled = function (disabled = true) {
         this.disabled = disabled
         return this
     }
@@ -84,18 +106,16 @@ function tag(name, ...children) {
 
 // ========== Helpers ==========
 
-function clearHTML(element) {
+const clearHTML = (element) => {
     element.innerHTML = ""
 }
 
-function replaceHTML(element, ...children) {
+const replaceHTML = (element, ...children) => {
     clearHTML(element)
-    for (const child of children) {
-        element.appendChild(child)
-    }
+    children.forEach(child => element.appendChild(child))
 }
 
-function replaceText(element, newText) {
+const replaceText = (element, newText) => {
     element.textContent = newText
 }
 
@@ -111,40 +131,30 @@ for (const _t of _simpleTagNames) {
     globalThis[_t] = (...children) => tag(_t, ...children);
 }
 
-function a(label, url, target = "") {
-    let node = tag("a").setAttr({ href: url, target: target });
-    node.innerText = label;
-    return node;
+const a = (label, url, target = "") => {
+    const node = tag("a").setAttr({ href: url, target })
+    node.innerText = label
+    return node
 }
 
-function img(source) {
-    return tag("img").setAttr({ src: source });
-}
+const img = (source) => tag("img").setAttr({ src: source })
 
-function btn(label, type = "button") {
-    let node = tag("button");
-    node.setAttr({ type });
-    node.innerText = label;
-    return node;
+const btn = (label, type = "button") => {
+    const node = tag("button")
+    node.setAttr({ type })
+    node.innerText = label
+    return node
 }
 
 // ========== List ============
 
-function ul(...children) {
-    return tag("ul", ...children)
-}
-
-function ol(...children) {
-    return tag("ol", ...children)
-}
-
-function li(...children) {
-    return tag("li", ...children)
-}
+const ul = (...children) => tag("ul", ...children)
+const ol = (...children) => tag("ol", ...children)
+const li = (...children) => tag("li", ...children)
 
 // ========== FORM ============
 function form(...children) {
-    let node = tag("form", ...children)
+    const node = tag("form", ...children)
 
     node.setMethod = function (method) { this.setAttr({ method }); return this }
     node.setAction = function (action) { this.setAttr({ action }); return this }
@@ -157,10 +167,8 @@ function form(...children) {
 }
 
 function input(type = "text") {
-    let node = tag("input")
-        .setAttr({
-            type: type
-        })
+    const node = tag("input")
+        .setAttr({ type })
 
     node.setValue = function (value) { this.value = value; return this }
     node.setType = function (type) { this.setAttr({ type }); return this }
@@ -169,8 +177,8 @@ function input(type = "text") {
     node.setPattern = function (pattern) { this.setAttr({ pattern }); return this }
     node.setMin = function (min) { this.setAttr({ min }); return this }
     node.setMax = function (max) { this.setAttr({ max }); return this }
-    node.isDisabled = function (disabled = true) { this.disabled = disabled; return this }
-    node.isRequired = function (required = true) { this.setAttr({ required }); return this }
+    node.setDisabled = function (disabled = true) { this.disabled = disabled; return this }
+    node.setRequired = function (required = true) { this.setAttr({ required }); return this }
     node.onInput = function (callback) { this.addEventListener("input", callback); return this }
     node.onChange = function (callback) { this.addEventListener("change", callback); return this }
 
@@ -178,77 +186,55 @@ function input(type = "text") {
 }
 
 function textarea() {
-    let node = tag("textarea")
+    const node = tag("textarea")
 
     node.setPlaceholder = function (placeholder) { this.setAttr({ placeholder }); return this }
     node.setValue = function (value) { this.value = value; return this }
     node.setName = function (name) { this.setAttr({ name }); return this }
-    node.isDisabled = function (disabled = true) { this.disabled = disabled; return this }
-    node.isRequired = function (required = true) { if (required) this.setAttr({ required: true }); return this }
+    node.setDisabled = function (disabled = true) { this.disabled = disabled; return this }
+    node.setRequired = function (required = true) { if (required) this.setAttr({ required: true }); return this }
 
     return node
 }
 
 function select(...children) {
-    let node = tag("select", ...children)
+    const node = tag("select", ...children)
 
     node.setName = function (name) { this.setAttr({ name }); return this; }
     node.setValue = function (value) { this.value = value; return this; }
     node.onChange = function (callback) { this.addEventListener("change", callback); return this }
-    node.isDisabled = function (disabled = true) { this.disabled = disabled; return this }
-    node.isRequired = function (required = true) { if (required) this.setAttr({ required: true }); return this }
+    node.setDisabled = function (disabled = true) { this.disabled = disabled; return this }
+    node.setRequired = function (required = true) { if (required) this.setAttr({ required: true }); return this }
 
     return node
 }
 
 function option(label, value, isSelected = false) {
-    let node = tag("option", label).setAttr({ value })
+    const node = tag("option", label).setAttr({ value })
     if (isSelected) node.selected = true
-    return node;
+    return node
 }
 
 function label(...children) {
-    let node = tag("label", ...children);
-
+    const node = tag("label", ...children)
     node.setTarget = function (targetId) { this.setAttr({ for: targetId }); return this }
-
-    return node;
+    return node
 }
 
 // ========== Table ============
 
-function table(...children) {
-    return tag("table", ...children)
-}
-
-function thead(...children) {
-    return tag("thead", ...children)
-}
-
-function tbody(...children) {
-    return tag("tbody", ...children)
-}
-
-function caption(...children) {
-    return tag("caption", ...children)
-}
-
-function tr(...children) {
-    return tag("tr", ...children)
-}
-
-function td(...children) {
-    return tag("td", ...children)
-}
-
-function th(...children) {
-    return tag("th", ...children)
-}
+const table = (...children) => tag("table", ...children)
+const thead = (...children) => tag("thead", ...children)
+const tbody = (...children) => tag("tbody", ...children)
+const caption = (...children) => tag("caption", ...children)
+const tr = (...children) => tag("tr", ...children)
+const td = (...children) => tag("td", ...children)
+const th = (...children) => tag("th", ...children)
 
 // ========== Graphics ============
 
 function canvas(width = 300, height = 150) {
-    let node = tag("canvas").setAttr({ width, height })
+    const node = tag("canvas").setAttr({ width, height })
 
     node.setWidth = function (w) { this.width = w; return this }
     node.setHeight = function (h) { this.height = h; return this }
@@ -270,17 +256,9 @@ function canvas(width = 300, height = 150) {
 // ========== Utilities ============
 
 // Simpler query selectors
-function getById(id) {
-    return document.getElementById(id)
-}
-
-function getByClass(className) {
-    return document.getElementsByClassName(className)
-}
-
-function getByTag(tagName) {
-    return document.getElementsByTagName(tagName)
-}
+const getById = (id) => document.getElementById(id)
+const getByClass = (className) => document.getElementsByClassName(className)
+const getByTag = (tagName) => document.getElementsByTagName(tagName)
 
 // ========== Basic Router ============
 /**
@@ -304,7 +282,7 @@ function basicRouter(routes, container, defaultRoute = "home") {
         throw new Error('Container must be a DOM element or a valid CSS selector string')
     }
 
-    function renderRoute() {
+    const renderRoute = () => {
         const path = window.location.hash.slice(1) || defaultRoute
         const pageFunction = routes[path]
 
@@ -312,8 +290,7 @@ function basicRouter(routes, container, defaultRoute = "home") {
         rootElement.innerHTML = ''
 
         if (pageFunction && typeof pageFunction === 'function') {
-            const content = pageFunction()
-            rootElement.appendChild(content)
+            rootElement.appendChild(pageFunction())
         } else {
             // Simple 404 fallback
             const notFound = document.createElement('div')
