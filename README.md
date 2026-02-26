@@ -12,7 +12,7 @@ Key ideas:
 - Create elements: `tag`, `div`, `span`, `p`, `h1..h6`, `img`, `a`, etc.
 - Form helpers: `form`, `input`, `textarea`, `select`, `option`, `label` with useful chainable setters.
 - List & table helpers: `ul`, `ol`, `li`, `table`, `thead`, `tbody`, `tr`, `td`, `th`, `caption`.
-- Chainable convenience methods: `.setAttr()`, `.setId()`, `.setClass()`, `.toggleClass()`, `.setCss()`, `.on()`, `.onClick()`, `.isDisabled()` and more.
+- Chainable convenience methods: `.setAttr()`, `.setId()`, `.setClass()`, `.toggleClass()`, `.setStyle()`, `.on()`, `.onClick()`, `.setDisabled()` and more.
 - Small router: `basicRouter` — render functions into a container based on URL hash.
 - Utility helpers: `clearHTML`, `replaceHTML`, `replaceText`, `getById`, `getByClass`, `getByTag`.
 
@@ -50,7 +50,7 @@ Creating elements and chaining helpers:
 const el = domino.div(
 	domino.h1('Hello, DOMino').setClass('hero'),
 	domino.p('Small, composable DOM building.'),
-	domino.btn('Click me').onClick(() => alert('clicked')).setCss({ padding: '8px' })
+	domino.btn('Click me').onClick(() => alert('clicked')).setStyle({ padding: '8px' })
 ).setAttr({ id: 'main' })
 
 document.body.appendChild(el)
@@ -97,9 +97,9 @@ Each element returned from the builders includes chainable methods such as:
 
 - setAttr(object) — set multiple attributes
 - setId(id), setClass(name), toggleClass(name)
-- setCss(stringOrObject)
+- setStyle(stringOrObject)
 - on(event, handler), onClick(handler)
-- isDisabled(), isRequired(), setValue(), setPlaceholder(), and many form-specific setters on inputs and form nodes
+- setDisabled(), setRequired(), setValue(), setPlaceholder(), and many form-specific setters on inputs and form nodes
 
 Refer to the source `domino.js` for the full list and exact method names.
 

@@ -1,15 +1,20 @@
 /**
  * Creates a DOM element with the specified tag name and appends child nodes or text.
- * Adds chainable helper methods to the element for setting attributes, event listeners, id, and class.
+ * Adds chainable helper methods to the element for setting attributes, event listeners, id, class, etc.
  *
  * @function
  * @param {string} name - The tag name of the element to create (e.g., 'div', 'span').
  * @param {...(string|Node)} children - Child elements or text to append to the created element.
  * @returns {HTMLElement} The created DOM element with chainable helper methods:
- *   - attr(name: string, value: string): HTMLElement
+ *   - setAttr(attrs: Object): HTMLElement
  *   - on(eventType: string, callbackFunction: function): HTMLElement
  *   - setId(idOfElement: string): HTMLElement
- *   - setClass(className: string): HTMLElement
+ *   - addClass(className: string): HTMLElement
+ *   - removeClass(className: string): HTMLElement
+ *   - toggleClass(className: string): HTMLElement
+ *   - setStyle(style: string|Object): HTMLElement
+ *   - onClick(callbackFunction: function): HTMLElement
+ *   - isDisabled(disabled = true): HTMLElement
  */
 function tag(name, ...children) {
     let node = document.createElement(name)
@@ -68,8 +73,9 @@ function tag(name, ...children) {
         return this
     }
 
-    node.isDisabled = function () {
-        this.disabled = true
+    // setter style for disabled state, accepts boolean (default true)
+    node.isDisabled = function (disabled = true) {
+        this.disabled = disabled
         return this
     }
 
@@ -95,93 +101,31 @@ function replaceText(element, newText) {
 
 // ========== Primitives ==========
 
-function hr() {
-    return tag("hr")
-}
-
-function br() {
-    return tag("br")
-}
-
-function div(...children) {
-    return tag("div", ...children)
-}
-
-function header(...children) {
-    return tag("header", ...children)
-}
-
-function main(...children) {
-    return tag("main", ...children)
-}
-
-function footer(...children) {
-    return tag("footer", ...children)
-}
-
-function h1(...children) {
-    return tag("h1", ...children)
-}
-
-function h2(...children) {
-    return tag("h2", ...children)
-}
-
-function h3(...children) {
-    return tag("h3", ...children)
-}
-
-function h4(...children) {
-    return tag("h4", ...children)
-}
-
-function h5(...children) {
-    return tag("h5", ...children)
-}
-
-function h6(...children) {
-    return tag("h6", ...children)
-}
-
-function em(...children) {
-    return tag("em", ...children)
-}
-
-function mark(...children) {
-    return tag("mark", ...children)
-}
-
-function small(...children) {
-    return tag("small", ...children)
-}
-
-function span(...children) {
-    return tag("span", ...children)
-}
-
-function p(...children) {
-    return tag("p", ...children)
+// simple tag factories are generated to keep the code DRY
+const _simpleTagNames = [
+    "hr", "br", "div", "header", "main", "footer",
+    "h1", "h2", "h3", "h4", "h5", "h6",
+    "em", "mark", "small", "span", "p", "nav"
+];
+for (const _t of _simpleTagNames) {
+    globalThis[_t] = (...children) => tag(_t, ...children);
 }
 
 function a(label, url, target = "") {
-    let node = tag("a").setAttr({ href: url, target: target })
-    node.innerText = label
-    return node
-}
-
-function nav(...children) {
-    return tag("nav", ...children)
+    let node = tag("a").setAttr({ href: url, target: target });
+    node.innerText = label;
+    return node;
 }
 
 function img(source) {
-    return tag("img").setAttr({ src: source })
+    return tag("img").setAttr({ src: source });
 }
 
 function btn(label, type = "button") {
-    let node = tag("button")
-    node.setAttr({ type })
-    node.innerText = label
-    return node
+    let node = tag("button");
+    node.setAttr({ type });
+    node.innerText = label;
+    return node;
 }
 
 // ========== List ============
