@@ -42,113 +42,113 @@
  *   - onClick(callbackFunction: function): HTMLElement
  */
 function tag(name, ...children) {
-    const node = document.createElement(name)
-    children.forEach(child => {
-        node.appendChild(
-            typeof child === "string" ? document.createTextNode(child) : child
-        )
-    })
+  const node = document.createElement(name)
+  children.forEach(child => {
+    node.appendChild(
+      typeof child === "string" ? document.createTextNode(child) : child
+    )
+  })
 
-    node.setAttr = function (attributeList) {
-        for (const item in attributeList) {
-            this.setAttribute(item, attributeList[item])
-        }
-        return this
+  node.setAttr = function (attributeList) {
+    for (const item in attributeList) {
+      this.setAttribute(item, attributeList[item])
     }
+    return this
+  }
 
-    node.setId = function (id) {
-        this.setAttr({ id })
-        return this
+  node.setId = function (id) {
+    this.setAttr({ id })
+    return this
+  }
+
+  node.addClass = function (className) {
+    this.classList.add(className)
+    return this
+  }
+
+  node.removeClass = function (className) {
+    this.classList.remove(className)
+    return this
+  }
+
+  node.toggleClass = function (className) {
+    this.classList.toggle(className)
+    return this
+  }
+
+  node.setClasses = function (...classNames) {
+    this.className = classNames.join(' ')
+    return this
+  }
+
+  node.setStyle = function (style) {
+    // Accept either a css text string or an object map of CSS properties
+    if (typeof style === 'string') {
+      this.style.cssText = style
+    } else if (typeof style === 'object' && style !== null) {
+      Object.assign(this.style, style)
     }
+    return this
+  }
 
-    node.addClass = function (className) {
-        this.classList.add(className)
-        return this
-    }
+  node.setDisabled = function (disabled = true) {
+    this.disabled = disabled
+    return this
+  }
 
-    node.removeClass = function (className) {
-        this.classList.remove(className)
-        return this
-    }
+  node.on = function (eventType, callbackFunction) {
+    this.addEventListener(eventType, callbackFunction)
+    return this
+  }
 
-    node.toggleClass = function (className) {
-        this.classList.toggle(className)
-        return this
-    }
+  node.onClick = function (callbackFunction) {
+    this.on("click", callbackFunction)
+    return this
+  }
 
-    node.setClasses = function (...classNames) {
-        this.className = classNames.join(' ')
-        return this
-    }
-
-    node.setStyle = function (style) {
-        // Accept either a css text string or an object map of CSS properties
-        if (typeof style === 'string') {
-            this.style.cssText = style
-        } else if (typeof style === 'object' && style !== null) {
-            Object.assign(this.style, style)
-        }
-        return this
-    }
-
-    node.setDisabled = function (disabled = true) {
-        this.disabled = disabled
-        return this
-    }
-
-    node.on = function (eventType, callbackFunction) {
-        this.addEventListener(eventType, callbackFunction)
-        return this
-    }
-
-    node.onClick = function (callbackFunction) {
-        this.on("click", callbackFunction)
-        return this
-    }
-
-    return node
+  return node
 }
 
 // ========== Helpers ==========
 
 const clearHTML = (element) => {
-    element.innerHTML = ""
+  element.innerHTML = ""
 }
 
 const replaceHTML = (element, ...children) => {
-    clearHTML(element)
-    children.forEach(child => element.appendChild(child))
+  clearHTML(element)
+  children.forEach(child => element.appendChild(child))
 }
 
 const replaceText = (element, newText) => {
-    element.textContent = newText
+  element.textContent = newText
 }
 
 // ========== Primitives ==========
 
 // simple tag factories are generated to keep the code DRY
 const _simpleTagNames = [
-    "hr", "br", "div", "header", "main", "footer",
-    "h1", "h2", "h3", "h4", "h5", "h6",
-    "em", "mark", "small", "span", "p", "nav"
+  "hr", "br", "div", "header", "main", "footer",
+  "h1", "h2", "h3", "h4", "h5", "h6",
+  "em", "mark", "small", "span", "p", "nav"
 ];
 for (const _t of _simpleTagNames) {
-    globalThis[_t] = (...children) => tag(_t, ...children);
+  globalThis[_t] = (...children) => tag(_t, ...children);
 }
 
 const a = (label, url, target = "") => {
-    const node = tag("a").setAttr({ href: url, target })
-    node.innerText = label
-    return node
+  const node = tag("a").setAttr({ href: url, target })
+  node.innerText = label
+  return node
 }
 
 const img = (source) => tag("img").setAttr({ src: source })
 
 const btn = (label, type = "button") => {
-    const node = tag("button")
-    node.setAttr({ type })
-    node.innerText = label
-    return node
+  const node = tag("button")
+  node.setAttr({ type })
+  node.innerText = label
+  return node
 }
 
 // ========== List ============
@@ -159,71 +159,71 @@ const li = (...children) => tag("li", ...children)
 
 // ========== FORM ============
 function form(...children) {
-    const node = tag("form", ...children)
+  const node = tag("form", ...children)
 
-    node.setMethod = function (method) { this.setAttr({ method }); return this }
-    node.setAction = function (action) { this.setAttr({ action }); return this }
-    node.setAutocomplete = function (value) { this.setAttr({ autocomplete: value }); return this }
-    node.setEnctype = function (value) { this.setAttr({ enctype: value }); return this }
-    node.setTarget = function (value) { this.setAttr({ target: value }); return this }
-    node.onSubmit = function (callback) { this.addEventListener("submit", callback); return this }
+  node.setMethod = function (method) { this.setAttr({ method }); return this }
+  node.setAction = function (action) { this.setAttr({ action }); return this }
+  node.setAutocomplete = function (value) { this.setAttr({ autocomplete: value }); return this }
+  node.setEnctype = function (value) { this.setAttr({ enctype: value }); return this }
+  node.setTarget = function (value) { this.setAttr({ target: value }); return this }
+  node.onSubmit = function (callback) { this.addEventListener("submit", callback); return this }
 
-    return node
+  return node
 }
 
 function input(type = "text") {
-    const node = tag("input")
-        .setAttr({ type })
+  const node = tag("input")
+    .setAttr({ type })
 
-    node.setValue = function (value) { this.value = value; return this }
-    node.setType = function (type) { this.setAttr({ type }); return this }
-    node.setName = function (name) { this.setAttr({ name }); return this }
-    node.setPlaceholder = function (placeholder) { this.setAttr({ placeholder }); return this }
-    node.setPattern = function (pattern) { this.setAttr({ pattern }); return this }
-    node.setMin = function (min) { this.setAttr({ min }); return this }
-    node.setMax = function (max) { this.setAttr({ max }); return this }
-    node.setDisabled = function (disabled = true) { this.disabled = disabled; return this }
-    node.setRequired = function (required = true) { this.required = required; return this }
-    node.onInput = function (callback) { this.addEventListener("input", callback); return this }
-    node.onChange = function (callback) { this.addEventListener("change", callback); return this }
+  node.setValue = function (value) { this.value = value; return this }
+  node.setType = function (type) { this.setAttr({ type }); return this }
+  node.setName = function (name) { this.setAttr({ name }); return this }
+  node.setPlaceholder = function (placeholder) { this.setAttr({ placeholder }); return this }
+  node.setPattern = function (pattern) { this.setAttr({ pattern }); return this }
+  node.setMin = function (min) { this.setAttr({ min }); return this }
+  node.setMax = function (max) { this.setAttr({ max }); return this }
+  node.setDisabled = function (disabled = true) { this.disabled = disabled; return this }
+  node.setRequired = function (required = true) { this.required = required; return this }
+  node.onInput = function (callback) { this.addEventListener("input", callback); return this }
+  node.onChange = function (callback) { this.addEventListener("change", callback); return this }
 
-    return node
+  return node
 }
 
 function textarea() {
-    const node = tag("textarea")
+  const node = tag("textarea")
 
-    node.setPlaceholder = function (placeholder) { this.setAttr({ placeholder }); return this }
-    node.setValue = function (value) { this.value = value; return this }
-    node.setName = function (name) { this.setAttr({ name }); return this }
-    node.setDisabled = function (disabled = true) { this.disabled = disabled; return this }
-    node.setRequired = function (required = true) { this.required = required; return this }
+  node.setPlaceholder = function (placeholder) { this.setAttr({ placeholder }); return this }
+  node.setValue = function (value) { this.value = value; return this }
+  node.setName = function (name) { this.setAttr({ name }); return this }
+  node.setDisabled = function (disabled = true) { this.disabled = disabled; return this }
+  node.setRequired = function (required = true) { this.required = required; return this }
 
-    return node
+  return node
 }
 
 function select(...children) {
-    const node = tag("select", ...children)
+  const node = tag("select", ...children)
 
-    node.setName = function (name) { this.setAttr({ name }); return this; }
-    node.setValue = function (value) { this.value = value; return this; }
-    node.onChange = function (callback) { this.addEventListener("change", callback); return this }
-    node.setDisabled = function (disabled = true) { this.disabled = disabled; return this }
-    node.setRequired = function (required = true) { this.required = required; return this }
+  node.setName = function (name) { this.setAttr({ name }); return this; }
+  node.setValue = function (value) { this.value = value; return this; }
+  node.onChange = function (callback) { this.addEventListener("change", callback); return this }
+  node.setDisabled = function (disabled = true) { this.disabled = disabled; return this }
+  node.setRequired = function (required = true) { this.required = required; return this }
 
-    return node
+  return node
 }
 
 function option(label, value, isSelected = false) {
-    const node = tag("option", label).setAttr({ value })
-    if (isSelected) node.selected = true
-    return node
+  const node = tag("option", label).setAttr({ value })
+  if (isSelected) node.selected = true
+  return node
 }
 
 function label(...children) {
-    const node = tag("label", ...children)
-    node.setTarget = function (targetId) { this.setAttr({ for: targetId }); return this }
-    return node
+  const node = tag("label", ...children)
+  node.setTarget = function (targetId) { this.setAttr({ for: targetId }); return this }
+  return node
 }
 
 // ========== Table ============
@@ -239,23 +239,23 @@ const th = (...children) => tag("th", ...children)
 // ========== Graphics ============
 
 function canvas(width = 300, height = 150) {
-    const node = tag("canvas").setAttr({ width, height })
+  const node = tag("canvas").setAttr({ width, height })
 
-    node.setWidth = function (w) { this.width = w; return this }
-    node.setHeight = function (h) { this.height = h; return this }
-    node.setSize = function (w, h) { this.width = w; this.height = h; return this }
+  node.setWidth = function (w) { this.width = w; return this }
+  node.setHeight = function (h) { this.height = h; return this }
+  node.setSize = function (w, h) { this.width = w; this.height = h; return this }
 
-    node.get2d = function () { return this.getContext('2d') }
-    node.getWebGL = function () { return this.getContext('webgl') }
+  node.get2d = function () { return this.getContext('2d') }
+  node.getWebGL = function () { return this.getContext('webgl') }
 
-    // Kényelmes rajzolás callback-kel
-    node.draw = function (callback) {
-        const ctx = this.getContext('2d')
-        callback(ctx, this)
-        return this
-    }
+  // Kényelmes rajzolás callback-kel
+  node.draw = function (callback) {
+    const ctx = this.getContext('2d')
+    callback(ctx, this)
+    return this
+  }
 
-    return node
+  return node
 }
 
 // ========== Utilities ============
@@ -264,6 +264,28 @@ function canvas(width = 300, height = 150) {
 const getById = (id) => document.getElementById(id)
 const getByClass = (className) => document.getElementsByClassName(className)
 const getByTag = (tagName) => document.getElementsByTagName(tagName)
+
+/**
+ * Creates a reactive state container.
+ * @param {*} initialValue - The initial state value.
+ * @returns {{ get: function, set: function, subscribe: function }}
+ */
+function createState(initialValue) {
+  let value = initialValue
+  const subscribers = new Set()
+
+  return {
+    get: () => value,
+    set: (newValue) => {
+      value = typeof newValue === 'function' ? newValue(value) : newValue
+      subscribers.forEach(fn => fn(value))
+    },
+    subscribe: (fn) => {
+      subscribers.add(fn)
+      return () => subscribers.delete(fn)
+    }
+  }
+}
 
 // ========== Basic Router ============
 /**
@@ -274,36 +296,36 @@ const getByTag = (tagName) => document.getElementsByTagName(tagName)
  * @param {string} defaultRoute - Default route when no hash is present (default: "home")
  */
 function basicRouter(routes, container, defaultRoute = "home") {
-    // Resolve container to DOM element
-    let rootElement
-    if (typeof container === 'string') {
-        rootElement = document.querySelector(container)
-        if (!rootElement) {
-            throw new Error(`Container element not found: ${container}`)
-        }
-    } else if (container && container.nodeType === 1) { // Check if it's a DOM element
-        rootElement = container
+  // Resolve container to DOM element
+  let rootElement
+  if (typeof container === 'string') {
+    rootElement = document.querySelector(container)
+    if (!rootElement) {
+      throw new Error(`Container element not found: ${container}`)
+    }
+  } else if (container && container.nodeType === 1) { // Check if it's a DOM element
+    rootElement = container
+  } else {
+    throw new Error('Container must be a DOM element or a valid CSS selector string')
+  }
+
+  const renderRoute = () => {
+    const path = window.location.hash.slice(1) || defaultRoute
+    const pageFunction = routes[path]
+
+    // Clear container
+    rootElement.innerHTML = ''
+
+    if (pageFunction && typeof pageFunction === 'function') {
+      rootElement.appendChild(pageFunction())
     } else {
-        throw new Error('Container must be a DOM element or a valid CSS selector string')
+      // Simple 404 fallback
+      const notFound = document.createElement('div')
+      notFound.textContent = '404 Not Found'
+      rootElement.appendChild(notFound)
     }
+  }
 
-    const renderRoute = () => {
-        const path = window.location.hash.slice(1) || defaultRoute
-        const pageFunction = routes[path]
-
-        // Clear container
-        rootElement.innerHTML = ''
-
-        if (pageFunction && typeof pageFunction === 'function') {
-            rootElement.appendChild(pageFunction())
-        } else {
-            // Simple 404 fallback
-            const notFound = document.createElement('div')
-            notFound.textContent = '404 Not Found'
-            rootElement.appendChild(notFound)
-        }
-    }
-
-    window.addEventListener("hashchange", renderRoute)
-    renderRoute() // Initial render
+  window.addEventListener("hashchange", renderRoute)
+  renderRoute() // Initial render
 }
