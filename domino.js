@@ -31,14 +31,15 @@
  * @param {...(string|Node)} children - Child elements or text to append to the created element.
  * @returns {HTMLElement} The created DOM element with chainable helper methods:
  *   - setAttr(attrs: Object): HTMLElement
- *   - on(eventType: string, callbackFunction: function): HTMLElement
  *   - setId(idOfElement: string): HTMLElement
  *   - addClass(className: string): HTMLElement
  *   - removeClass(className: string): HTMLElement
  *   - toggleClass(className: string): HTMLElement
+ *   - setClasses(...calssNames: string ): HTMLElement
  *   - setStyle(style: string|Object): HTMLElement
- *   - onClick(callbackFunction: function): HTMLElement
  *   - setDisabled(disabled = true): HTMLElement
+ *   - on(eventType: string, callbackFunction: function): HTMLElement
+ *   - onClick(callbackFunction: function): HTMLElement
  */
 function tag(name, ...children) {
     const node = document.createElement(name)
@@ -70,13 +71,13 @@ function tag(name, ...children) {
         return this
     }
 
-    node.setClasses = function (...classNames) {
-        this.className = classNames.join(' ')
+    node.toggleClass = function (className) {
+        this.classList.toggle(className)
         return this
     }
 
-    node.toggleClass = function (className) {
-        this.classList.toggle(className)
+    node.setClasses = function (...classNames) {
+        this.className = classNames.join(' ')
         return this
     }
 
@@ -90,6 +91,11 @@ function tag(name, ...children) {
         return this
     }
 
+    node.setDisabled = function (disabled = true) {
+        this.disabled = disabled
+        return this
+    }
+
     node.on = function (eventType, callbackFunction) {
         this.addEventListener(eventType, callbackFunction)
         return this
@@ -97,12 +103,6 @@ function tag(name, ...children) {
 
     node.onClick = function (callbackFunction) {
         this.on("click", callbackFunction)
-        return this
-    }
-
-    // setter style for disabled state, accepts boolean (default true)
-    node.setDisabled = function (disabled = true) {
-        this.disabled = disabled
         return this
     }
 
