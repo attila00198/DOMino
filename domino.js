@@ -129,8 +129,8 @@ const replaceText = (element, newText) => {
 // simple tag factories are generated to keep the code DRY
 const _simpleTagNames = [
     "hr", "br", "div", "header", "main", "footer",
-    "h1", "h2", "h3", "h4", "h5", "h6",
-    "em", "mark", "small", "span", "p", "nav"
+    "section", "h1", "h2", "h3", "h4", "h5", "h6",
+    "em", "mark", "small", "span", "p", "nav", "i"
 ];
 for (const _t of _simpleTagNames) {
     globalThis[_t] = (...children) => tag(_t, ...children);
@@ -289,7 +289,7 @@ function basicRouter(routes, container, defaultRoute = "home") {
     }
 
     const renderRoute = () => {
-        const path = window.location.hash.slice(1) || defaultRoute
+        const path = (window.location.hash.slice(1).split("?")[0]) || defaultRoute
         const pageFunction = routes[path]
 
         // Clear container
